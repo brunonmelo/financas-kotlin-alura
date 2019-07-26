@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import br.com.alura.financask.R
+import br.com.alura.financask.extrension.converteCurrency
 import br.com.alura.financask.extrension.formataParaBrasileiro
 import br.com.alura.financask.ui.model.Tipo
 import br.com.alura.financask.ui.model.Transacao
@@ -38,8 +39,8 @@ class TransacoesListAdapter(
     }
 
     private fun getValorTransacao(transacao: Transacao): SpannableString {
-        val valorString = String.format("R$ %.2f", transacao.valor)
-        val spannableString = SpannableString(valorString)
+        val moedaFormatada = transacao.valor.converteCurrency()
+        val spannableString = SpannableString(moedaFormatada)
         val color = when (transacao.tipo) {
             Tipo.RECEITA -> ContextCompat.getColor(context, R.color.receita)
             Tipo.DESPESA -> ContextCompat.getColor(context, R.color.despesa)
@@ -47,7 +48,7 @@ class TransacoesListAdapter(
         spannableString.setSpan(
             ForegroundColorSpan(color),
             0,
-            valorString.length,
+            moedaFormatada.length,
             Spannable.SPAN_INCLUSIVE_EXCLUSIVE
         )
         return spannableString
